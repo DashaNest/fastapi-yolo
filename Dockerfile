@@ -1,16 +1,15 @@
-# Используем официальный Python образ
 FROM python:3.10-slim
 
-# Устанавливаем рабочую директорию
 WORKDIR /app
 
 # Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1-mesa-dev \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
-    libxrender-dev \
+    libfontconfig1 \
+    libxrender1 \
     libgomp1 \
     wget \
     && rm -rf /var/lib/apt/lists/*
@@ -23,9 +22,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем код приложения
 COPY ./app /app/app
-
-# Создаем директорию для кэша моделей
-RUN mkdir -p /root/.cache/ultralytics
 
 # Предварительно загружаем модель YOLO
 RUN python -c "from ultralytics import YOLO; YOLO('yolov5m.pt')"
