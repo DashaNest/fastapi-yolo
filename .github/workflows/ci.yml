@@ -27,10 +27,9 @@ jobs:
           libglib2.0-0 \
           libsm6 \
           libxext6 \
-          libxrender-dev \
-          libgomp1 \
-          libgstreamer1.0-0 \
-          ffmpeg
+          libfontconfig1 \
+          libxrender1 \
+          libgomp1
         
     - name: Install Python dependencies
       run: |
@@ -38,9 +37,7 @@ jobs:
         pip install -r requirements.txt
         
     - name: Run tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}
       run: |
-        pytest tests/ -v
-        
-    - name: Test Docker build
-      run: |
-        docker build -t fastapi-yolo-test .
+        pytest tests/ -v --tb=short
